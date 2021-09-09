@@ -1,0 +1,19 @@
+{
+    "extends": ["plugin:jest/all"],
+    "rules": {
+        "jest/no-hooks": [
+            0,
+            {
+                "allow": ["afterEach", "afterAll", "beforeEach", "beforeAll"]
+            }
+        ],
+        "jest/no-disabled-tests": 0,
+        "jest/prefer-expect-assertions": 0,
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+        "immutable/no-mutation": 0,
+        "no-global-assign": [
+            "error",
+            {"exceptions": ["window", "global"]}
+        ]
+    }
+}

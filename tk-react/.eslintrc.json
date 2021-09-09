@@ -1,0 +1,81 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".js", ".jsx", ".ts", ".tsx"]
+            }
+        }
+    },
+    "ignorePatterns": [
+        "dist/",
+        "mfePages.js",
+        "webpack.*"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "airbnb",
+        "airbnb/hooks",
+        "plugin:jsx-a11y/recommended",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "env": {
+        "es6": true,
+        "browser": true
+    },
+    "plugins": [
+        "immutable",
+        "jsx-a11y",
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "implicit-arrow-linebreak": 0,
+        "immutable/no-let": 2,
+        "immutable/no-this": 2,
+        "immutable/no-mutation": 2,
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".ts",
+                    ".tsx"
+                ]
+            }
+        ],
+        "jsx-a11y/click-events-have-key-events": 0,
+        "jsx-a11y/no-noninteractive-element-interactions": 0,
+        "jsx-a11y/no-static-element-interactions": 0,
+        "jsx-a11y/no-noninteractive-tabindex": 0,
+        "jsx-a11y/label-has-associated-control": 0,
+        "jsx-a11y/role-has-required-aria-props": 1,
+        "react/jsx-max-props-per-line": [
+            1,
+            {
+                "maximum": 1,
+                "when": "multiline"
+            }
+        ],
+        "react/prop-types": 0,
+        "react/jsx-props-no-spreading": 0,
+        "react/require-default-props": 0,
+        "import/extensions": 0,
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": [
+            "error"
+        ],
+        "@typescript-eslint/ban-ts-comment": 0,
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": [
+            "error"
+        ]
+    }
+}

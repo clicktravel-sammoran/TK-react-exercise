@@ -1,0 +1,8 @@
+.Ingredient_pill {
+    margin: 5px;
+}
+
+.Header {
+    display: flex;
+    justify-content: space-between;
+}

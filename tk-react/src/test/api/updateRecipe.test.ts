@@ -1,13 +1,15 @@
-import { StatusCodes } from 'http-status-codes';
+import axios from 'axios';
 import updateRecipe from '../../api/updateRecipe';
 
-const { OK } = StatusCodes;
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('updateRecipe', () => {
   it('should PATCH a recipe JSON returning the updated recipe', async () => {
+    const id = 1;
     const payload = {
       name: 'Burgers and chips',
-      id: 1,
+      id,
       description: 'What a meal',
       ingredients: [
         { name: 'Burger' },
@@ -16,15 +18,11 @@ describe('updateRecipe', () => {
       ],
     };
 
-    const response = {
-      status: OK,
-      json: jest.fn().mockResolvedValue(payload),
-    };
+    mockedAxios.patch.mockResolvedValue({ data: payload });
 
-    const fetch = jest.fn().mockResolvedValue(response);
+    const result = await updateRecipe({ id, payload });
 
-    const result = await updateRecipe({ payload, fetch });
-
-    expect(result).toStrictEqual(payload);
+    expect(mockedAxios.patch).toHaveBeenCalledWith(`/recipes/${id}`, { ...payload });
+    expect(result.name).toStrictEqual(payload.name);
   });
 });

@@ -1,4 +1,8 @@
+import axios from 'axios';
 import getRecipes from '../../api/getRecipes';
+
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('getRecipes', () => {
   it('should get an array of recipes', async () => {
@@ -17,28 +21,17 @@ describe('getRecipes', () => {
       },
     ];
 
-    const response = {
-      status: 200,
-      json: jest.fn().mockResolvedValue(mockResponseJson),
-    };
+    mockedAxios.get.mockResolvedValue({ data: mockResponseJson });
 
-    const fetch = jest.fn().mockReturnValue(response);
+    const result = await getRecipes({});
 
-    const result = await getRecipes({
-      fetch,
-    });
-
+    expect(mockedAxios.get).toHaveBeenCalledWith('/recipes/', { params: { name: undefined } });
     expect(result).toStrictEqual(mockResponseJson);
-    expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:8000/recipes/',
-      { method: 'GET' },
-    );
   });
 
-  describe('and given a filter query', () => {
+  describe('given a filter query', () => {
     const filterQuery = 'Pizza';
-
-    it('should return recipes that only match that query', async () => {
+    it('should make a get request with the filter query as a param', async () => {
       const mockResponseJson = [
         {
           name: 'Pizza and Chips',
@@ -48,23 +41,12 @@ describe('getRecipes', () => {
         },
       ];
 
-      const response = {
-        status: 200,
-        json: jest.fn().mockResolvedValue(mockResponseJson),
-      };
+      mockedAxios.get.mockResolvedValue({ data: mockResponseJson });
 
-      const fetch = jest.fn().mockReturnValue(response);
+      const result = await getRecipes({ filterQuery });
 
-      const result = await getRecipes({
-        filterQuery,
-        fetch,
-      });
-
+      expect(mockedAxios.get).toHaveBeenCalledWith('/recipes/', { params: { name: 'Pizza' } });
       expect(result).toStrictEqual(mockResponseJson);
-      expect(fetch).toHaveBeenCalledWith(
-        'http://localhost:8000/recipes/?name=Pizza',
-        { method: 'GET' },
-      );
     });
   });
 });

@@ -1,30 +1,24 @@
+import axios from 'axios';
 import getRecipe from '../../api/getRecipe';
 
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+
 describe('getRecipe', () => {
-  describe('given an Id', () => {
-    const id = '1';
+  const id = 1;
+  it('should get an array of recipes', async () => {
+    const mockResponseJson = {
+      name: 'Bangers And Mash',
+      description: 'Whack it all together',
+      id,
+      ingredients: [{ name: 'Sausage' }],
+    };
 
-    it('should get a recipe', async () => {
-      const mockResponseJson = {
-        name: 'Bangers And Mash',
-        description: 'Whack it all together',
-        id,
-        ingredients: [{ name: 'Sausage' }],
-      };
+    mockedAxios.get.mockResolvedValue({ data: mockResponseJson });
 
-      const response = {
-        status: 200,
-        json: jest.fn().mockResolvedValue(mockResponseJson),
-      };
+    const result = await getRecipe({ id });
 
-      const fetch = jest.fn().mockReturnValue(response);
-
-      const result = await getRecipe({
-        id,
-        fetch,
-      });
-
-      expect(result).toStrictEqual(mockResponseJson);
-    });
+    expect(mockedAxios.get).toHaveBeenCalledWith(`/recipes/${id}`);
+    expect(result).toStrictEqual(mockResponseJson);
   });
 });

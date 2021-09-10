@@ -1,7 +1,11 @@
+import axios from 'axios';
 import postRecipe from '../../api/postRecipe';
 
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+
 describe('postRecipe', () => {
-  it('should POST a recipe JSON returning the recipe with an id', async () => {
+  it('should post a recipe, returning the recipe with an id', async () => {
     const payload = {
       name: 'Burgers and chips',
       description: 'What a meal',
@@ -11,17 +15,12 @@ describe('postRecipe', () => {
         { name: 'potatoes' },
       ],
     };
-
     const mockResultId = 1;
-    const response = {
-      status: 201,
-      json: jest.fn().mockResolvedValue({ id: mockResultId, ...payload }),
-    };
+    mockedAxios.post.mockResolvedValue({ data: { id: mockResultId, ...payload } });
 
-    const fetch = jest.fn().mockResolvedValue(response);
+    const result = await postRecipe({ payload });
 
-    const result = await postRecipe({ payload, fetch });
-
+    expect(mockedAxios.post).toHaveBeenCalledWith('/recipes/', { ...payload });
     expect(result.name).toStrictEqual(payload.name);
     expect(result.id).toStrictEqual(mockResultId);
   });

@@ -1,28 +1,10 @@
-// @ts-ignore
-import defaultFetch from 'node-fetch';
-import { StatusCodes } from 'http-status-codes';
+import axios from 'axios';
 import Recipe from '../types/Recipe';
 
-const { OK } = StatusCodes;
-
 export default async ({
+  id,
   payload,
-  fetch = defaultFetch,
 }: {
+    id: number,
     payload: Recipe,
-    fetch: typeof defaultFetch
-}): Promise<Recipe> => {
-  const { id } = payload;
-  const path = `http://localhost:8000/recipes/${id}`;
-
-  const response = await fetch(path, {
-    method: 'PATCH',
-    body: JSON.stringify(payload),
-    headers: { 'Content-Type': 'application/json' },
-  });
-
-  if (response.status !== OK) {
-    console.log('Something is not happy!');
-  }
-  return response.json();
-};
+}): Promise<Recipe> => axios.patch(`/recipes/${id.toString()}`, payload).then(({ data }) => data);

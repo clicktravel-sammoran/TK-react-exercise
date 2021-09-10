@@ -1,25 +1,20 @@
-import { StatusCodes } from 'http-status-codes';
+import axios from 'axios';
+import NO_CONTENT from 'http-status-codes';
 import deleteRecipe from '../../api/deleteRecipe';
 
-const { NO_CONTENT } = StatusCodes;
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('deleteRecipe', () => {
-  describe('given an Id', () => {
-    const id = '28';
+  const id = 1;
+  it('should delete a recipe', async () => {
+    const mockStatus = NO_CONTENT;
 
-    it('should get a recipe', async () => {
-      const response = {
-        status: NO_CONTENT,
-      };
+    mockedAxios.delete.mockResolvedValue({ status: mockStatus });
 
-      const fetch = jest.fn().mockReturnValue(response);
+    const result = await deleteRecipe({ id });
 
-      const result = await deleteRecipe({
-        id,
-        fetch,
-      });
-
-      expect(result).toStrictEqual('Recipe deleted successfully');
-    });
+    expect(mockedAxios.delete).toHaveBeenCalledWith(`/recipes/${id}`);
+    expect(result).toStrictEqual(mockStatus);
   });
 });
